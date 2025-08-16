@@ -1,0 +1,42 @@
+# Pytest configuration coverage report file.
+# the 'omit' section specifies
+# this is NOT what is excluded from test, this is what is excluded from
+# the test coverage report
+# more info: https://pytest-cov.readthedocs.io/en/latest/config.html
+
+[run]
+omit =
+    # various non-business logic folders & files
+    /docs/*
+    /pipeline/*
+    /tests/*
+    /setup.py
+    */system_integration/*
+    /spaceprod/src/system_integration/*
+    /spaceprod/src/system_integration/macro.py
+    /spaceprod/src/system_integration/micro.py
+    /spaceprod/src/system_integration/store_cluster_mapping.py
+    /spaceprod/src/system_integration/data_contracts.py
+    /spaceprod/src/elasticity/model_run/plotting.py
+    /spaceprod/src/optimization/fit_sales_penetration/helpers.py
+
+    # excluding all main.py wrapper files because those should only
+    # contain 'def task_' wrappers that are only for accessing context,
+    # reading & writing data and should not contain any business logic
+    */main.py
+
+    # the following is a list of modules that are excluded from
+    # coverage TEMPORARILY for being less stable.
+    # criteria for being excluded:
+    # - recently introduced and not battle-tested modules
+    # - expected to change substantially in near future
+
+    # system integ still actively being developed during SIT/UAT period
+
+    # this logic is not currently part of the pipeline but we don't want
+    # to delete it as Inno team may wish to integrate it later into the
+    # pipeline
+
+
+
+

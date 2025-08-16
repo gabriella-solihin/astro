@@ -1,0 +1,45 @@
+elasticity_outputs:
+  bay_data_pre_index: "sobeys_space_prod/{run_id}/elasticity_modeling/bay_data_pre_index"
+
+  # TODO: re-enable commented paths
+  final_elastisity_output_sales: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_sales"
+  final_elastisity_output_margin: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_margin"
+
+  final_elasticity_output_sales_imputed: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elasticity_output_sales_imputed"
+  final_elasticity_output_margins_imputed: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elasticity_output_margins_imputed"
+
+
+elasticity_pre_processing:
+
+  # which STORE_PHYSICAL_LOCATION_NO's to exclude
+  exclusions_store_physical_location_no: ['17066']
+
+  # a list of STORE_NO replacement pairs. Each element should be a pair
+  # of STORE_NO, the 1st one is what is being replaced, 2nd - the replacement
+  replace_store_no: [["7497","4761"],]
+
+  #this is still a dummy artificial category for the elasticity and opt code.
+  #the new need states dont rely on cannibilization ids anymore but are included to group items together
+  #that should be all within the same group of need states as well as optimized in the same general section
+  cannib_list: []
+
+  # will ignore net new stores, else breaks (should be always False by default)
+  allow_net_new_stores: True
+
+  # if True - will use (external) user-supplied revised merged clusters
+  # if False - will use (generated) internal merged clusters
+  use_revised_merged_clusters: True
+
+  # TODO: explain this
+  fix_for_sobeys_sutton: ["26978", "11429", "SOBEYS", "4761", "Ontario"]
+
+
+elasticity_model:
+  dependent_var: 'Margin' # whether we run curves with sales or margin as outcome variable
+  seed: 123
+  scope: 'micro' # do not change for micro config
+  max_facings: 13 #number of facings which includes the 0th facing
+  iterations: 1000
+  chains: 4
+  warmup: 500
+  thin: 1

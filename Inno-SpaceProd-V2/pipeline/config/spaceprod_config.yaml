@@ -1,0 +1,45 @@
+# ------------------------------------------------------------------------------
+#   Output Paths
+#   Use this parameters set where the final results should be outputted
+# ------------------------------------------------------------------------------
+output_dir: "sobeys_space_prod/dev/"
+environment: "testing"
+
+
+# ------------------------------------------------------------------------------
+# Toggle Pipeline Execution Steps
+#   Use these parameters to run only certain steps in the pipeline (true/false)
+# ------------------------------------------------------------------------------
+pipeline_steps:
+  clustering:
+    internal_clustering: false
+    external_clustering: false
+    need_states_creation: false
+    profiling: false
+  elasticity:
+    micro: false
+    macro: false
+  optimization: true
+  adjacencies: false
+
+
+# ------------------------------------------------------------------------------
+# Global parameters across configs
+#   Use this to access information valid across modules
+# ------------------------------------------------------------------------------
+transactions_global:
+  exclusion_list: [ '4714',  # stores that had recent rennovations
+                    '4731',
+                    '701',
+                    '867',
+                    '937',
+                    '4741',
+                    '4723',
+                    '4743',
+                    '933',
+                    '934',
+                    '695',
+                    '819',
+                    '693',
+                    '17066',
+  ]

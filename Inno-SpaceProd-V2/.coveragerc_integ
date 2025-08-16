@@ -1,0 +1,17 @@
+# Pytest configuration coverage report file.
+# the 'omit' section specifies
+# this is NOT what is excluded from test, this is what is excluded from
+# the test coverage report
+# more info: https://pytest-cov.readthedocs.io/en/latest/config.html
+
+[run]
+include =
+    # ONLY including all main.py wrapper files because those should only
+    # contain 'def task_' wrappers that are only for accessing context,
+    # reading & writing data and should not contain any business logic
+    # this is what needs to run as part of integration test
+    */main.py
+
+
+
+

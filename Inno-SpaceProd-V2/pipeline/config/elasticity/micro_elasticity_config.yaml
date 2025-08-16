@@ -1,0 +1,66 @@
+elasticity_outputs:
+  # deviations between total length of items with sales vs total length of items in POG, for each section master
+  pog_deviation: "sobeys_space_prod/{run_id}/elasticity_modeling/pog_deviation"
+  
+  combined_valid_pog_processed: "sobeys_space_prod/{run_id}/elasticity_modeling/combined_valid_pog_processed"
+  all_ns_clusters: "sobeys_space_prod/{run_id}/elasticity_modeling/all_ns_clusters"
+  bay_data_pre_index: "sobeys_space_prod/{run_id}/elasticity_modeling/bay_data_pre_index"
+  bay_data_pre_index_all: "sobeys_space_prod/{run_id}/elasticity_modeling/bay_data_pre_index_all"
+  
+  # Good NS curves 
+  final_elastisity_output_sales: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_sales"
+  final_elastisity_output_margin: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_margin"
+
+  # All NS curves - to be used by the optimization module
+  final_elastisity_output_sales_all: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_sales_all"
+  final_elastisity_output_margin_all: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elastisity_output_margin_all"
+
+  bad_ns_whole_section_sales: "sobeys_space_prod/{run_id}/elasticity_modeling/bad_ns_whole_section_sales"
+  bad_ns_whole_section_margin: "sobeys_space_prod/{run_id}/elasticity_modeling/bad_ns_whole_section_margin"
+
+  final_elasticity_output_sales_imputed: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elasticity_output_sales_imputed"
+  final_elasticity_output_margins_imputed: "sobeys_space_prod/{run_id}/elasticity_modeling/final_elasticity_output_margins_imputed"
+
+  # intermediate outputs
+  elast_raw_df_txns_items:  "sobeys_space_prod/{run_id}/elasticity_modeling/elast_raw_df_txns_items"
+  elast_raw_df_location_processed:  "sobeys_space_prod/{run_id}/elasticity_modeling/elast_raw_df_location_processed"
+
+elasticity_pre_processing:
+
+  # which STORE_PHYSICAL_LOCATION_NO's to exclude
+  exclusions_store_physical_location_no: ['17066']
+
+  # a list of STORE_NO replacement pairs. Each element should be a pair
+  # of STORE_NO, the 1st one is what is being replaced, 2nd - the replacement
+  replace_store_no: [["7497","4761"],]
+
+  #this is still a dummy artificial category for the elasticity and opt code.
+  #the new need states dont rely on cannibilization ids anymore but are included to group items together
+  #that should be all within the same group of need states as well as optimized in the same general section
+  cannib_list: []
+
+  # will ignore net new stores, else breaks (should be always False by default)
+  allow_net_new_stores: True
+
+  # if True - will use (external) user-supplied revised merged clusters
+  # if False - will use (generated) internal merged clusters
+  use_revised_merged_clusters: True
+
+  # TODO: explain this
+  fix_for_sobeys_sutton: ["26978", "11429", "SOBEYS", "4761", "Ontario"]
+
+  # Config parameters to filter out bad sections from low POG adherence
+  remove_invalid_sections: True
+  pog_deviation_cutoff: 0.2 # Sum of Width X Facings for all items in section must be within pog_deviation_cutoff% (divided by 100) of reported width
+  pog_sales_cutoff: 0.8 # pog_sales_cutoff% (divided by 100) of items in section must have sales
+
+
+elasticity_model:
+  dependent_var: 'Margin' # whether we run curves with sales or margin as outcome variable
+  seed: 123
+  max_facings: 13 #number of facings which includes the 0th facing
+  iterations: 1000
+  chains: 4
+  warmup: 500
+  thin: 1
+  bad_fits_threshold: 0

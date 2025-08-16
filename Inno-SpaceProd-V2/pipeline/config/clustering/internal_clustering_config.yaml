@@ -1,0 +1,33 @@
+internal_clustering_outputs:
+  # main internal clustering output
+  clustering_output_assignment: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/store_clustering_assign_section_level"
+
+  # secondary internal clustering outputs
+  combined_sales_levels: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/combined_sales_levels"
+  combined_sales_store_section: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/combined_sales_store_section"
+
+  # internal clustering raw intermediate outputs
+  int_clustering_output_assignment_raw: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/int_clustering_output_assignment_raw"
+  int_clustering_proportions_raw: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/int_clustering_proportions_raw"
+  int_clustering_sales_totals_by_store_section_raw: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/int_clustering_sales_totals_by_store_section_raw"
+  int_clustering_combined_sales_levels_raw: "sobeys_space_prod/{run_id}/internal_clustering/clustering_outputs/int_clustering_combined_sales_levels_raw"
+
+num_clusters: 3
+
+# set this to true if you already have clusters and are looking to rerun internal clustering in order to generate the profiling outputs.
+use_predetermined_clusters: false
+
+
+internal_clustering_filter_dict:
+  category_exclusion_list: ["36-01-01", "60-03-14"]
+  category: "Fresh"
+  STORE_NO:
+    EXISTING: "7497"
+    NEW: "4761"
+  correction_record: ['26978', '11429', "SOBEYS", "4761", "Ontario"]
+  store_replace: ['17066']
+
+
+derived_value_threshold: 0.95 #  "DERIVED_VALUE", RATIO_WEIGHT_ITEMS") < threshold, F.col("ITEM_QTY_CAPPED")).otherwise(F.col("ITEM_WEIGHT_CAPPED")
+weight_threshold: 0.95 # percent of items sold as weight of the total within the category
+outlier_threshold: 0.95 # cap units and quantity sold within a category to 95th percentile

@@ -1,0 +1,28 @@
+
+# flag to force heuristic solver even for num_cat =< 20
+# value should be: true or false
+use_heuristic_solver: false
+
+adjacencies_outputs:
+  optimal_out_path: "sobeys_space_prod/{run_id}/adjacencies/optimal_outputs"
+  assoc_path: 'sobeys_space_prod/{run_id}/adjacencies/cat_associations'
+
+# list of section master name to map departments to pog sections
+# TODO: to remove when the section masters are clean & we have department
+#  information. For now just do frozen grocery dept as mapping
+adjacencies_scope: [
+        "Dinners And Entrees",
+        "Frozen Bread GF",
+        "Frozen Breakfast",
+        "Frozen Dessert",
+        "Frozen Fruit",
+        "Frozen Handhelds",
+        "Frozen International",
+        "Frozen Juice",
+        "Frozen Meat",
+        "Frozen Natural",
+        "Frozen Pizza",
+        "Frozen Potato",
+        "Frozen Vegetables",
+        "Ice Cream Novelties",
+    ]

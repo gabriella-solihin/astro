@@ -1,0 +1,8 @@
+dashboard_outputs:
+  file_1_view_parquet: 'sobeys_space_prod/{run_id}/dashboard/file_1_view_parquet'
+  file_1_view: "sobeys_space_prod/{run_id}/dashboard/file_1_view.csv"
+  file_2_view:  "sobeys_space_prod/{run_id}/dashboard/file_2_view.csv"
+  file_3_view: "sobeys_space_prod/{run_id}/dashboard/file_3_view.csv"
+  file_4_view: "sobeys_space_prod/{run_id}/dashboard/file_4_view.csv"
+  file_5_view: "sobeys_space_prod/{run_id}/dashboard/file_5_view.csv"
+  mission_summary: 'sobeys_space_prod/{run_id}/dashboard/mission_summary'  

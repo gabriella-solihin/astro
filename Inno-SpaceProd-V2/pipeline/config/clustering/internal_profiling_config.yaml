@@ -1,0 +1,5 @@
+internal_profiling_outputs:
+  section: "sobeys_space_prod/{run_id}/internal_profiling/section"
+  section_ns: "sobeys_space_prod/{run_id}/internal_profiling/section_ns"
+  sale_summary_section: "sobeys_space_prod/{run_id}/internal_profiling/sale_summary_section"
+  sale_summary_need_state: "sobeys_space_prod/{run_id}/internal_profiling/sale_summary_need_state"

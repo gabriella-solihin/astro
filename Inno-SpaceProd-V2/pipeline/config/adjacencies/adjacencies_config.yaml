@@ -1,0 +1,56 @@
+
+# flag to force heuristic solver even for num_cat =< 20
+# value should be: true or false
+use_heuristic_solver: false
+
+adjacencies_outputs:
+  optimal_out_path: "sobeys_space_prod/{run_id}/adjacencies/optimal_outputs"
+  assoc_path: 'sobeys_space_prod/{run_id}/adjacencies/cat_associations'
+  category_clusters: 'sobeys_space_prod/{run_id}/adjacencies/category_clusters'
+  category_clusters_csv: 'sobeys_space_prod/{run_id}/adjacencies/category_clusters.csv'
+
+# list of section master name to map departments to pog sections
+# TODO: to remove when the section masters are clean & we have department
+#  information. For now just do frozen grocery dept as mapping
+adjacencies_scope: [
+        "Dinners And Entrees",
+        "Frozen Bread GF",
+        "Frozen Breakfast",
+        "Frozen Dessert",
+        "Frozen Fruit",
+        "Frozen Handhelds",
+        "Frozen International",
+        "Frozen Juice",
+        "Frozen Meat",
+        "Frozen Natural",
+        "Frozen Pizza",
+        "Frozen Potato",
+        "Frozen Vegetables",
+        "Ice Cream Novelties",
+    ]
+
+category_exclusion_list: [
+      "CARIBBEAN",
+      "EAST ASIAN",
+      "EAST ASIAN EXTENDED",
+      "ETHNIC COOKIES ",
+      "ETHNIC OIL - INTEGRATED",
+      "EUROPEAN",
+      "FILIPINO",
+      "Frozen East Asian",
+      "Frozen Filipino",
+      "Frozen Greek",
+      "Frozen Middle Eastern",
+      "Frozen Multicultural",
+      "Frozen South Asian",
+      "LATIN",
+      "MEXICAN",
+      "MIDDLE EASTERN ",
+      "PORTUGUESE",
+      "SOUTH ASIAN",
+      "SOUTH EAST ASIAN COMBO",
+    ]
+
+adjacencies_clustering:
+  deep_split: 4
+  min_cluster_size: 1

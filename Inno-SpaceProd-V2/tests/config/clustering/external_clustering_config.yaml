@@ -1,0 +1,35 @@
+
+external_clustering_outputs:
+  final_outputs_location: "sobeys_space_prod/dev/external_clustering/outputs/"   #final location for external store clustering
+  intermediate_outputs_location: "sobeys_space_prod/dev/external_clustering/temp/" #intermediate location for feature clustering
+  testing_outputs_location: "sobeys_space_prod/dev/external_clustering/outputs/testing/"  #testing output location for store clustering
+
+external_clustering_inputs:
+    inputs_location: "sobeys_space_prod/dev/external_clustering/inputs/"
+    location_ontario: "locations_ontario.csv"
+    store_list: "Grocery Retailers - Store List - Sales and Sizes_March2021.csv"
+    demographics_5mins_drive: "SobeysIncDriveTimeDemographics_5MinsDrive.csv"
+    demographics_10mins_drive: "SobeysIncDriveTimeDemographics_10MinsDrive.csv"
+    demographics_15mins_drive: "SobeysIncDriveTimeDemographics_15MinsDrive.csv"
+    competitors: "2021-04-12 - Competition by Drive Time v3.csv"
+    mapping: "mapping.csv"
+    external_clustering_data: "external_clustering_input_data.csv"
+    external_sobeys_clustering_data: "full_external_sobeys_store_data_clustering.csv"
+    feature_cluster_path: "sobeys_space_prod/dev/external_clustering/outputs/feature_clusters.csv"
+
+distance:
+  feature: 2 #maximum defined distance between features
+  store: 8.5 #max distance for stores in clustering
+  num_features: 236
+
+filter_dict:
+  STORE_CORRECTED:
+    Store_No: 4761
+    Store_Physical_Location_No: 11429
+
+  BANNER_CORRECTED:
+    Banner_Key: 1016225
+    Comp_Banner_Format: "Discount"
+
+flag_value: "1"
+

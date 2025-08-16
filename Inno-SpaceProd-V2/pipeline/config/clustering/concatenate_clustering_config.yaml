@@ -1,0 +1,2 @@
+concatenate_clustering_outputs:
+  merged_clusters: "sobeys_space_prod/{run_id}/merged_clusters"

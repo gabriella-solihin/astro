@@ -1,0 +1,31 @@
+outputs:
+
+  # MAIN OUTPUT FILES (PARQUET + CSV)
+  store_cluster_mapping: sobeys_space_prod/{run_id}/system_integration/store_cluster_mapping
+  store_cluster_mapping_csv: sobeys_space_prod/{run_id}/system_integration/store_cluster_mapping.csv
+
+  system_micro_output: sobeys_space_prod/{run_id}/system_integration/system_micro_output
+  system_micro_output_csv: sobeys_space_prod/{run_id}/system_integration/system_micro_output.csv
+
+  system_macro_output: sobeys_space_prod/{run_id}/system_integration/system_macro_output
+  system_macro_output_csv: sobeys_space_prod/{run_id}/system_integration/system_macro_output.csv
+
+  # INTERMEDIATE OUTPUT FILES
+  frozen_store_sizes: sobeys_space_prod/{run_id}/system_integration/frozen_store_sizes
+
+# various "hard-coded" values to populate in the files
+values:
+
+  # should be an input from Contaxtix
+  expected_publish_date: "2023-01-30"
+
+  # a prefix that will be pre-appended to our internal run ID and stored
+  # in the output as a 'run_name'
+  run_name_prefix: "some_run_name"
+
+# system files will be filtered to the given list of section masters
+# used for e.g. when testing with particular list of SM (e.g. Paper Towel)
+# NOTE: the spelling should match exactly as in POG data
+# must be a list of strings
+# if this list empty -> no filtering will happen
+list_section_masters: []

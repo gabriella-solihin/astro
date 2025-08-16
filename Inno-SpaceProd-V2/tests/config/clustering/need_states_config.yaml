@@ -1,0 +1,45 @@
+# General config
+
+need_states_inputs:
+  region: "ontario"
+  trans_path: "prod_outputs/etl/ontario/txnitem"
+  prod_path: "prod_outputs/etl/all/product/latest"
+  store_path: "prod_outputs/etl/all/location/latest/"
+  pog_path: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs"
+  # Data pre-processing config
+  contactability_flag_path: 'sobeys_perso/contact_flag_eda/parsed_flag_data'
+  banner: ["SOBEYS"]
+  st_date: "2020-02-28"
+  end_date: "2021-03-31"
+  category:  "Ice Cream"
+  num_prods: 912
+  visit_thresh: 5
+  item_vol_thresh: 100
+
+# Model fit config
+need_states_model:
+  batch_size: 32
+  embedding_size: 128
+  num_ns: 5 # Number of negative samples per target/context pair
+  item_embeddings_layer_name: "p2v_embedding"
+  window_size: 5
+  max_num_items: 50
+  steps_per_epoch: 1000
+  num_epochs: 100
+  valid_window: 20
+  valid_size: 20
+  save_item_embeddings_period: 1
+  early_stopping_patience: None
+  save_period: 1
+  run_similarity_qa: true
+  similarity_period: 1
+
+# Need state creation config
+need_states_outputs:
+  need_state_save_path: "sobeys_space_prod/dev/elasticity_modeling/temp_new_need_states/"
+  save_path: "sobeys_space_prod/dev/elasticity_modeling/temp_new_need_states/"
+  save_item_embeddings_path: "item_embeddings.hdf5"
+  cosine_sim_save_path: "sobeys_space_prod/dev/elasticity_modeling/temp_new_need_states/"
+  testing_outputs_location: "sobeys_space_prod/dev/elasticity_modeling/temp_new_need_states/"
+
+need_states_creation: true

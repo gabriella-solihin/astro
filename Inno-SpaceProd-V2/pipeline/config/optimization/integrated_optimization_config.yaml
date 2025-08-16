@@ -1,0 +1,243 @@
+outputs:
+  # data containers will be stored in this folder in the following way:
+  # <THIS PATH> / <CONTAINER NAME> / <1 OR MORE DIMENSION FOLDERS>
+  # data containers are stored in pickle format
+  # the dimensional folders are created as part of parallelized process
+  data_containers_parent_path: "sobeys_space_prod/{run_id}/optimization/data_containers"
+
+  ##############################################################
+  # INITIAL RUNS OUTPUTS
+  ##############################################################
+
+  # task outputs
+  # these are regular parquet outputs
+  # they mainly container dimensional data + paths to relevant data
+  # containers (above) containing parallelized output
+  task_opt_pre_proc_determine_scope_for_margin_rerun: "sobeys_space_prod/{run_id}/optimization/task_opt_pre_proc_determine_scope_for_margin_rerun"
+  task_opt_pre_proc_general: "sobeys_space_prod/{run_id}/optimization/task_opt_pre_proc_general"
+  task_opt_pre_proc_region_banner_dept_step_one: "sobeys_space_prod/{run_id}/optimization/task_opt_pre_proc_region_banner_dept_step_one"
+  task_opt_pre_proc_region_banner_dept_step_two: "sobeys_space_prod/{run_id}/optimization/task_opt_pre_proc_region_banner_dept_step_two"
+  task_opt_pre_proc_region_banner_dept_store: "sobeys_space_prod/{run_id}/optimization/task_opt_pre_proc_region_banner_dept_store"
+  task_opt_modelling_construct_all_sets: "sobeys_space_prod/{run_id}/optimization/task_opt_modelling_construct_all_sets"
+  task_opt_all_penetration_opt_sales_for_predict: "sobeys_space_prod/{run_id}/optimization/task_opt_all_penetration_opt_sales_for_predict"
+  task_opt_all_penetration_opt_margin_for_predict: "sobeys_space_prod/{run_id}/optimization/task_opt_all_penetration_opt_margin_for_predict"
+  task_opt_modelling_create_and_solve_model: "sobeys_space_prod/{run_id}/optimization/task_opt_modelling_create_and_solve_model"
+  task_opt_post_proc_per_reg_ban_dept: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_per_reg_ban_dept"
+
+  # outputs of the final concat-and-summarize task
+  task_opt_post_proc_concat_item_output_master: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/item_output_master"
+  task_opt_post_proc_concat_summary_per_store_master: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_per_store_master"
+  task_opt_post_proc_concat_summary_facing_master: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_facing_master"
+  task_opt_post_proc_concat_region_banner_dept_store_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/region_banner_dept_store_summary"
+  task_opt_post_proc_concat_region_banner_dept_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/region_banner_dept_summary"
+  task_opt_post_proc_concat_region_banner_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/region_banner_summary"
+  task_opt_post_proc_concat_summary_legal_breaks: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_legal_breaks"
+  task_opt_post_proc_concat_supplier_space_analysis: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/supplier_space_analysis"
+  task_opt_post_proc_concat_summary_legal_breaks_filtered: "sobeys_space_prod/{run_id}/optimization/task_crate_legal_breaks_output_float_filtered/summary_legal_breaks_float_filtered"
+
+  # outputs of the final concat-and-summarize task (CSV)
+  task_opt_post_proc_concat_item_output_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/item_output_master.csv"
+  task_opt_post_proc_concat_summary_per_store_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_per_store_master.csv"
+  task_opt_post_proc_concat_summary_facing_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_facing_master.csv"
+  task_opt_post_proc_concat_region_banner_dept_store_summary_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/region_banner_dept_store_summary.csv"
+  task_opt_post_proc_concat_region_banner_summary_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/region_banner_summary.csv"
+  task_opt_post_proc_concat_summary_legal_breaks_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/summary_legal_breaks.csv"
+  task_opt_post_proc_concat_supplier_space_analysis_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat_and_summarize/supplier_space_analysis.csv"
+  task_opt_post_proc_concat_summary_legal_breaks_filtered_csv: "sobeys_space_prod/{run_id}/optimization/task_crate_legal_breaks_output_float_filtered/summary_legal_breaks_float_filtered.csv"
+
+  # outputs used to concat (union) upstream model runs
+  # all of these outputs are partitioned by REGION/BANNER/DEPT
+  # these are consumed later on partition-by-partition basis to
+  # do further pos-processing
+  task_opt_post_proc_concat_df_elasticity_curves: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_elasticity_curves"
+  task_opt_post_proc_concat_df_shelve_space_df: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_shelve_space_df"
+  task_opt_post_proc_concat_df_product_info: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_product_info"
+  task_opt_post_proc_concat_df_merged_clusters_df: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_merged_clusters_df"
+  task_opt_post_proc_concat_df_store_category_dims: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_store_category_dims"
+  task_opt_post_proc_concat_df_opt_x_df: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_opt_x_df"
+  task_opt_post_proc_concat_df_opt_q_df: "sobeys_space_prod/{run_id}/optimization/task_opt_post_proc_concat/df_opt_q_df"
+
+
+  ##############################################################
+  # MARGIN RE-RUN OUTPUTS
+  ##############################################################
+
+  # task outputs
+  # these are regular parquet outputs
+  # they mainly container dimensional data + paths to relevant data
+  # containers (above) containing parallelized output
+  task_opt_rerun_pre_proc_region_banner_dept_step_one: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_pre_proc_region_banner_dept_step_one"
+  task_opt_rerun_pre_proc_region_banner_dept_step_two: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_pre_proc_region_banner_dept_step_two"
+  task_opt_rerun_pre_proc_region_banner_dept_store: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_pre_proc_region_banner_dept_store"
+  task_opt_rerun_modelling_construct_all_sets: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_modelling_construct_all_sets"
+  task_opt_rerun_modelling_create_and_solve_model: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_modelling_create_and_solve_model"
+  task_opt_rerun_post_proc_per_reg_ban_dept: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_per_reg_ban_dept"
+
+  # outputs of the final concat-and-summarize task (reruns)
+  task_opt_rerun_post_proc_concat_item_output_master: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_item_output_master/item_output_master"
+  task_opt_rerun_post_proc_concat_summary_per_store_master: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_summary_per_store_master/summary_per_store_master"
+  task_opt_rerun_post_proc_concat_summary_facing_master: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_summary_facing_master/summary_facing_master"
+  task_opt_rerun_post_proc_concat_region_banner_dept_store_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_region_banner_dept_store_summary/region_banner_dept_store_summary"
+  task_opt_rerun_post_proc_concat_region_banner_dept_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_region_banner_dept_summary/region_banner_dept_summary"
+  task_opt_rerun_post_proc_concat_region_banner_summary: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_region_banner_summary/region_banner_summary"
+  task_opt_rerun_post_proc_concat_summary_legal_breaks: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_region_banner_summary/summary_legal_breaks"
+  task_opt_rerun_post_proc_concat_supplier_space_analysis: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/supplier_space_analysis"
+
+  # final overall outputs after margin-rerun
+  task_opt_rerun_item_output_master_updated: "sobeys_space_prod/{run_id}/optimization/final_sales_margin_outputs/item_output_master"
+  task_opt_rerun_item_output_master_updated_csv: "sobeys_space_prod/{run_id}/optimization/final_sales_margin_outputs/item_output_master.csv"
+  task_opt_rerun_summary_legal_breaks_updated: "sobeys_space_prod/{run_id}/optimization/final_sales_margin_outputs/summary_legal_breaks"
+  task_opt_rerun_summary_legal_breaks_updated_csv: "sobeys_space_prod/{run_id}/optimization/final_sales_margin_outputs/summary_legal_breaks.csv"
+  task_opt_post_proc_concat_region_banner_dept_summary_csv: "sobeys_space_prod/{run_id}/optimization/final_sales_margin_outputs/region_banner_dept_summary.csv"
+
+
+  # outputs of the final concat-and-summarize task (reruns) (CSV)
+  task_opt_rerun_post_proc_concat_item_output_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/item_output_master.csv"
+  task_opt_rerun_post_proc_concat_summary_per_store_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/summary_per_store_master.csv"
+  task_opt_rerun_post_proc_concat_summary_facing_master_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/summary_facing_master.csv"
+  task_opt_rerun_post_proc_concat_region_banner_dept_store_summary_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/region_banner_dept_store_summary.csv"
+  task_opt_rerun_post_proc_concat_region_banner_dept_summary_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/region_banner_dept_summary.csv"
+  task_opt_rerun_post_proc_concat_region_banner_summary_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/region_banner_summary.csv"
+  task_opt_rerun_post_proc_concat_summary_legal_breaks_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/summary_legal_breaks.csv"
+  task_opt_rerun_post_proc_concat_supplier_space_analysis_csv: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat_and_summarize/supplier_space_analysis.csv"
+
+  # outputs used to concat (union) upstream model runs
+  # all of these outputs are partitioned by REGION/BANNER/DEPT
+  # these are consumed later on partition-by-partition basis to
+  # do further pos-processing
+  task_opt_rerun_post_proc_concat_df_elasticity_curves: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_elasticity_curves"
+  task_opt_rerun_post_proc_concat_df_shelve_space_df: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_shelve_space_df"
+  task_opt_rerun_post_proc_concat_df_product_info: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_product_info"
+  task_opt_rerun_post_proc_concat_df_merged_clusters_df: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_merged_clusters_df"
+  task_opt_rerun_post_proc_concat_df_store_category_dims: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_store_category_dims"
+  task_opt_rerun_post_proc_concat_df_opt_x_df: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_opt_x_df"
+  task_opt_rerun_post_proc_concat_df_opt_q_df: "sobeys_space_prod/{run_id}/optimization/task_opt_rerun_post_proc_concat/df_opt_q_df"
+
+  ##############################################################
+  # OUTPUT WITH MISSING FACINGS - FALLBACK TO CURRENT FACINGS
+  ##############################################################
+  opt_with_missing_opt_facings: "sobeys_space_prod/{run_id}/optimization/task_fill_missing_sections_with_current_facings/opt_with_missing_opt_facings"
+  opt_with_missing_opt_facings_csv: "sobeys_space_prod/{run_id}/optimization/task_fill_missing_sections_with_current_facings/opt_with_missing_opt_facings.csv"
+
+  ##############################################################
+  # AGGREGATION OPT OUTPUT
+  ##############################################################
+  opt_output_with_store_cluster_id: "sobeys_space_prod/{run_id}/optimization/opt_output_with_store_cluster_id"
+  opt_facings_by_item_and_store_cluster_id: "sobeys_space_prod/{run_id}/optimization/opt_facings_by_item_and_store_cluster_id"
+
+inputs:
+  use_merged_clusters_post_review: True # if this is true we read in the post review file (file 1 from dashboard) instead of elasticity file form concatenation pipeline - should be true for business outputs
+
+parameters:
+  dependent_var: 'Sales' # whether we run opt with sales or 'Margin' as outcome variable to optimize for # TODO remove this since we always start with sales now?
+    # TODO below macro section length is deprecated - will be replaced with manual overwrite
+  use_macro_section_length: false # if this is set to true we use the macro allocated space per section in the micro opt instead of the current POG section length equivalent space
+  enable_margin_reruns: true #if margin reruns should be enabled we save sales space for margin categories and use that as constraint to run those sections on margin again
+  max_facings: 13 #number of facings which includes the 0th facing - needs to be the same as elasticity curve files have
+  section_max_facings_percentile: .98 # max facings per region banner section is not total max but the x percentile
+  difference_of_facings_to_allocate_from_max_in_POG: 0 # this number is added (needs to be negative) when # of facings to allocate from max. facings seen in POG section
+  difference_of_facings_to_allocate_in_unit_proportions: 0 # this is added to previously determined max facings which already added the diff above. e.g. should be the same number just inverses
+
+  section_length_upper_deviation: 1 #from current space this is used for when we want to reserve extra space for local items or want to ensure there is tolerance for items that cannot wrap around shelves (e.g. linear space vs. aisle space tolerance)
+  section_length_lower_deviation: 1 #from current space
+  large_number: 99999
+
+  extra_space_in_legal_breaks_max: 2 # number of legal breaks higher than current
+  extra_space_in_legal_breaks_min: 2 # number of legal breaks lower than current
+
+  legal_section_break_increments:
+    Frozen: 30 # smallest increment we can move a legal section break - for frozen a door is 30 inches
+    All_other: 48 # 4ft for now
+
+  legal_section_break_dict:
+    use_legal_section_break_dict: False # if True, we don't use the regular legal_section_break_increments logic from above
+    Frozen:
+      legal_break_width: 30 # inches
+      extra_space_in_legal_breaks_max: 2
+      extra_space_in_legal_breaks_min: 2
+      min_breaks_per_section: 1
+    Dairy:
+      legal_break_width: 48 # inches
+      extra_space_in_legal_breaks_max: 2
+      extra_space_in_legal_breaks_min: 2
+      min_breaks_per_section: 1
+    All_other:
+      legal_break_width: 12 # inches
+      extra_space_in_legal_breaks_max: 8
+      extra_space_in_legal_breaks_min: 8
+      min_breaks_per_section: 4
+
+  run_on_theoretic_space: True # Default for production runs should be true. If testing, false here means we run on current width x facings instead
+
+  minimum_shelves_assumption: 3 #min number of shelves to be assumed in all POG sections - this is used for correcting wrong
+  possible_number_of_shelves_min: 3 # number of shelves to try for theoretic space and shelve finding
+  possible_number_of_shelves_max: 8
+  overwrite_at_min_shelve_increment: false # if false it overwrites every linear space per seciton break with theoretic space
+
+  section_master_excluded: ['Frozennaturalcombo'] #['Frozen Natural Combo', 'Frozen Natural Breads Gluten Free', 'Frozen Natural Entrees Pizza',
+#    'Frznaturalcombo', 'Frozennaturalcombo', 'Frznatbreadsgf', 'Frznatentreespizza', 'Frznatentreespizz', 'Frozen Bread GF', 'Frozen Natural']
+
+  # Cutoff for POG adherence when projecting the sales/margin estimates of optimization outputs.
+  pog_filter_cutoff: 0.9
+
+  enable_supplier_own_brands_constraints: False # when enabled we add the supplier and own brands constraint to optimization
+  enable_localized_space: True # if true we will subtract the localized space (either default or requested) from optimized space
+  overwrite_local_space_percentage: 0.02 # this will overwrite any local space and reserve any section. enable localized space must be true
+
+  unit_proportions_tolerance_in_opt: .15 #.08 is good for now # this is the tolerance that is added and subtracted for upper and lower bound constraints in opt
+  enable_sales_penetration: False # if true we enable the need state level sales penetration constraints for bad quality need state section if curves are do not fit well
+  unit_proportions_tolerance_in_opt_sales_penetration: .05 #this is the tolerance for sales penetration only. Should be tighter since we apply across more facings
+
+
+  filter_for_test_negotiations: False # filters on coffee and frozen breakfast section masters only
+  filter_for_specific_stores: True # currenlty used for IGA QC pilot store + couple others in same cluster
+  hold_items_constant_from_file: False # if true we will hold items constant from region banner file
+
+  # if set to True, will not break the execution when at least 1
+  # store/dept combination fails the optimization, otherwise if set to False
+  # throws a wrench to the pipeline if at least 1 store/dept fails
+  allow_model_solve_to_fail: False
+
+# solver
+solver_parameters:
+
+  # which solver to use can be set to either "CBC" or "Gurobi"
+  solver: 'CBC'
+
+  # CBCs CPU time not wall clock time (CBC only)
+  time_limit: 14400
+
+  # percentage gap once reached model terminates early (Gurobi + CBC)
+  gap_limit: 0.01
+
+  # max number of v-cores to be used on single store/dept instance (Gurobi + CBC)
+  # if None (~), default will be used (None can only be set for Gurobi)
+  threads: ~
+
+  # https://www.gurobi.com/documentation/9.0/refman/mipfocus.html (Gurobi only)
+  # if None, default will be used
+  mip_focus: ~
+
+  # (CBC only)
+  keep_files: False
+
+  # for small categories like fruit make this to false - otherwise infeasible
+  min_category_space: False
+
+  # rerun opt when it was infeasible in case there was an error in model.solve
+  # (Gurobi + CBC)
+  retry_seconds: 120
+
+
+
+
+filter_dict:
+  STORE_NO:
+    EXISTING: "7497"
+    NEW: "4761"
+  store_replace: '17066'
+
+# local items filters
+local_items:
+  min_sold_count: 1
+  ratio_threshold: 0.2

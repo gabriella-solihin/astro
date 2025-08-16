@@ -1,0 +1,106 @@
+# General config
+
+need_states_inputs:
+  num_prods: 912 # upper bound of products that are deemed of high importance to calculate cosine similarities for
+  visit_thresh: 2 # the lower the threshold the more items will be included with lower visits
+  item_vol_thresh: 0 # the lower the threshold the more items will be included with lower sales
+
+# Model fit config
+need_states_model:
+  batch_size: 32
+  embedding_size: 128 #default is 128
+  num_ns: 5 # Number of negative samples per target/context pair
+  item_embeddings_layer_name: "p2v_embedding"
+  window_size: 5
+  max_num_pairs: 50
+  steps_per_epoch: 100 #500
+  num_epochs: 500
+  valid_window: 20
+  valid_size: 20
+  save_item_embeddings_period: 1
+  early_stopping_patience: 100 #None
+  save_period: 1
+  run_similarity_qa: true
+  similarity_period: 1
+  list_hard_excluded_exec_ids: [
+    # regular timeouts that are happening beyond those that we excluded based
+    # on the item volume threshold
+    'atlantic_FOODLAND_European',
+    'west_IGA_EastAsianExtSauce',
+    'ontario_FOODLAND_Btc',
+    'atlantic_FOODLAND_Tensor',
+    'west_FRESHCO_FootCare',
+    'ontario_FOODLAND_FamilyPlan',
+    'atlantic_FOODLAND_Btc',
+    'atlantic_OTHER_CleanersAirCare',
+    'west_FRESHCO_SkinCare',
+    'west_THRIFTYFOODS_FamilyPlanCombo',
+    'west_THRIFTYFOODS_FeminineCareOtc',
+    'west_IGA_NaturalHaba',
+    'atlantic_OTHER_fldpkgddelientcoils',
+    'ontario_SOBEYS_cookingoil',
+
+    # mysterious IDs that are running forever and not caught by our timout function
+    'atlantic_FOODLAND_NaturalCondiments',
+    'ontario_SOBEYS_CanprevOrangenatAor',
+    'west_FRESHCO_MealReplacement',
+  ]
+
+
+  # categories/POGs with at least this number of items will be included in the
+  # prod2vec modelling as part of NS creation
+  item_limit_threshold: 9
+
+# Need state creation config
+need_states_outputs:
+
+  # POG processing outputs
+  # TODO: move to its own module and config
+  apollo_processed: "sobeys_space_prod/{run_id}/need_states_creation/apollo_processed"
+  exec_id_run_dimensions_lookup: "sobeys_space_prod/{run_id}/need_states_creation/exec_id_run_dimensions_lookup"
+  exec_id_exclusions: "sobeys_space_prod/{run_id}/need_states_creation/exec_id_exclusions"
+  section_master_lvl: "sobeys_space_prod/{run_id}/need_states_creation/section_master_lvl"
+  spaceman_processed: "sobeys_space_prod/{run_id}/need_states_creation/spaceman_processed"
+  combined_pog_processed: "sobeys_space_prod/{run_id}/need_states_creation/combined_pog_processed"
+  combined_sections: "sobeys_space_prod/{run_id}/need_states_creation/combined_sections"
+
+
+
+  # pre-processing outputs
+  pre_processing: "sobeys_space_prod/{run_id}/need_states_creation/pre_processing"
+  items_lost_ns_pre_proc: "sobeys_space_prod/{run_id}/need_states_creation/items_lost_ns_pre_proc"
+
+  # prod-to-vec modelling outputs
+  prod2vec_staged_data: "sobeys_space_prod/{run_id}/need_states_creation/prod2vec_staged_data"
+  prod2vec: "sobeys_space_prod/{run_id}/need_states_creation/prod2vec"
+  prod2vec_raw: "sobeys_space_prod/{run_id}/need_states_creation/prod2vec_raw"
+
+  # raw outputs of post-processing of NS
+  ns_raw_output_result_ns: "sobeys_space_prod/{run_id}/need_states_creation/ns_raw_output_result_ns"
+  ns_raw_output_dim_lookup: "sobeys_space_prod/{run_id}/need_states_creation/ns_raw_output_dim_lookup"
+  ns_raw_output_result_dm: "sobeys_space_prod/{run_id}/need_states_creation/ns_raw_output_result_dm"
+  ns_raw_output_cosine_sim: "sobeys_space_prod/{run_id}/need_states_creation/ns_raw_output_cosine_sim"
+
+  # final outputs of post-processing of NS
+  final_need_states: "sobeys_space_prod/{run_id}/need_states_creation/final_need_states"
+  final_dist_matrix: "sobeys_space_prod/{run_id}/need_states_creation/final_dist_matrix"
+  cosine_sim: "sobeys_space_prod/{run_id}/need_states_creation/cosine_sim"
+  dendrograms: "sobeys_space_prod/{run_id}/need_states_creation/dendrograms"
+
+
+# parameters for dynamic tree cutting
+cutree_dynamic:
+  min_cluster_size: 5 # minimum cluster size
+  deep_split: 3 # integer in the range 0 to 4. The higher the value, the more and smaller clusters will be produced.
+
+
+# TODO: need to be separate config
+pog_processing:
+
+  # how many store/pog combinations at MAX can be missing (ratio) after
+  # they have been patched with POG override
+  thresh_ratio_missing_store_pogs: 0.15
+
+  # how many pogs can be missing at MAX can be missing (ratio) after
+  #  # they have been patched with POG override
+  thresh_ratio_missing_pogs: 0.70

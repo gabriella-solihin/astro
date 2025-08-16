@@ -1,0 +1,60 @@
+
+external_clustering_outputs:
+    intermediate_processed_data: "sobeys_space_prod/{run_id}/external_clustering/temp/external_clustering_processed" # for processed dataframe. contains denominator adjusted values
+    intermediate_normalized_data: "sobeys_space_prod/{run_id}/external_clustering/temp/external_clustering_normalized" # input for store clustering. contains normalized values
+    feature_cluster: "sobeys_space_prod/{run_id}/external_clustering/temp/feature_clusters" # list of features after feature clustering
+
+    # final output file names
+    final_profiling_data: "sobeys_space_prod/{run_id}/external_clustering/outputs/external_store_clustering_data_profiling" # raw value environics data with cluster label
+    final_clustering_data: "sobeys_space_prod/{run_id}/external_clustering/outputs/external_store_clustering_data_processed" # processed environics data (divided by denominators) with cluster label
+    environics_output: "sobeys_space_prod/{run_id}/environics/environics_output_latest"
+
+    # output of the profiling module
+    profiling: 'sobeys_space_prod/{run_id}/external_clustering/profiling'
+
+
+
+column:
+    prefix: "2021" # environics data column prefix
+
+distance:
+  feature: 2 #maximum defined distance between features
+  store: 8.5 #max distance for stores in clustering
+
+filter_dict:
+  STORE_CORRECTED:
+    Store_No: 4761
+    Store_Physical_Location_No: 11429
+    National_Banner_Desc: "SOBEYS"
+    Region_Desc: "Ontario"
+    Postal_Cd: "XXXXXX"
+
+  BANNER_CORRECTED:
+    Banner_Key: 1016225
+    Comp_Banner_Format: "Discount"
+
+flag_value: 1
+
+# number of clusters to be used for feature clustering prior to store clustering
+num_clusters_features: 30
+
+# number of final store clusters to be generated for external clustering
+num_clusters: 3
+
+
+#immigration features #### Put this in the config for profiling module
+# TODO: @Angie, please add comment here explaining what this is for
+africa_group: ['Africa', 'Tanzania', 'Somalia', 'Tunisia', 'Cte_Divoire', 'Eritrea', 'Ethiopia', 'Kenya', 'Morocco',
+                'Lebanon', 'Eritrea', 'Ghana', 'Cameroon', 'Algeria']
+asia_group: ['Asia', 'Taiwan', 'Japan', 'Hong_Kong', 'Sri_Lanka',  'United_Arab_Emirates', 'Syria', 'India',
+              'Afghanistan', 'China', 'Pakistan', 'Saudi_Arbia', 'Nepal', 'Malaysia', 'Philippines', 'Cambodia', 'Vietnam', 'Iraq', 'Bangladesh']
+europe_group: ['Serbia', 'Europe', 'Italy', 'Turkey',' Bosnia_Herzegovina', 'Ukraine', 'Romania', 'Netherlands', 'Germany',
+                  'Czech_Republic', 'France', 'Greece','Portugal', 'Hungary', 'Poland', 'Croatia', 'Ireland']
+latin_america_group: ['South_America', 'Caribbean_And_Bermuda', 'Colombia', 'Chile', 'Brazil', 'Mexico', 'Venezuela', 'Haiti', 'Cuba', 'Peru', 'El_Salvador']
+
+
+# TODO: @Angie, please add comment here explaining what this is for
+exp: "2021"
+
+feature_list: ['africa_immigration', 'asia_immigration', 'europe_immigration', 'latin_america_immigration', "minorities", "population_age", 'household_income', 'other_demographics', 'education',
+                'competitor_segment_density', 'competitor_banner_density','other_competitors']

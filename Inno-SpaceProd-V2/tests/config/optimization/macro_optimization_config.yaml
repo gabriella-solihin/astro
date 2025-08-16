@@ -1,0 +1,55 @@
+outputs:
+  final_outputs_location: "sobeys_space_prod/dev/optimization/outputs/macro/"
+  raw_opt_location: "sobeys_space_prod/dev/optimization/intermediate/raw/macro/"
+  processed_opt_location: "sobeys_space_prod/dev/optimization/intermediate/processed/macro/"
+  sets_opt_location: "sobeys_space_prod/dev/optimization/intermediate/sets/macro/"
+  model_results_opt_location: "sobeys_space_prod/dev/optimization/intermediate/model_results/macro/"
+  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/macro/"
+
+
+
+inputs:
+  pog_input_file: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs/FRZ_ONT_BCG_MAY26 vREVISED.csv"
+  elasticity_output: "sobeys_space_prod/dev/elasticity_modeling/outputs/"
+  need_state_output: "sobeys_space_prod/dev/internal_clustering/need_state_output_new/"
+  elasticity_input: "sobeys_space_prod/dev/elasticity_modeling/inputs/"
+  elasticity_output_temp: "sobeys_space_prod/dev/elasticity_modeling/macro_temp_new_need_states/"
+  prod_path: "prod_outputs/etl/all/product/latest"
+  read_all_raw_data_flag: false
+
+transactions:
+  region: "ontario"
+  start_date: "2020-04-01" # FOR opt these shouldn't matter
+  end_date: "2020-04-07" # FOR opt these shouldn't matter
+
+parameters:
+  scope: 'macro'
+  dependent_var: 'Sales' # whether we run opt with sales or 'Margin' as outcome variable to optimize for
+  max_length_per_section: 99999 #upper bound of length in inches per section we can allocate
+  section_excluded: ['Frozen Natural Combo', 'Frozen Natural Breads Gluten Free', 'Frozen Natural Entrees Pizza']
+  increment: 30 # increment at which the section lengths are assigned (needs to be the same as in elasticity macro config)
+  extra_space_per_max_section_length: 30 #this is the extra space allowed per max section length across stores in region
+  extra_space_per_min_section_length: 30 # this is the less space subtracted from min section length across stores in region per section
+
+
+# solver
+solver_parameters:
+  time_limit: 450   #CBCs CPU time not wall clock time
+  gap_limit: .0005  # do not increase without a nationwide calibration. This has huge budgetary implications
+  solver: 'CBC'
+  keep_files: False
+
+
+
+save_intermediate_outputs: false
+write_output_parquet: true
+
+
+parallel_run:
+  max_workers: 6
+
+filter_dict:
+  cannib_id: "CANNIB-930"
+  STORE_NO:
+    EXISTING: "7497"
+    NEW: "4761"

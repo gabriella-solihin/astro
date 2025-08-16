@@ -1,0 +1,26 @@
+# final output file names
+external_clustering_outputs:
+  final_profiling_data: "sobeys_space_prod/dev/external_clustering/outputs/external_store_clustering_data_profiling"
+  # raw value environics data with cluster label
+  final_clustering_data: "sobeys_space_prod/dev/external_clustering/outputs/external_store_clustering_data_processed"
+  # processed environics data (divided by denominators) with cluster label
+  profiling: 'sobeys_space_prod/dev/external_clustering/profiling' # output of the profiling module
+
+# Immigration features - Following is the grouping followed to name 'Var' from 'Var_details'
+africa_group: ['Africa', 'Tanzania', 'Somalia', 'Tunisia', 'Cte_Divoire', 'Eritrea', 'Ethiopia', 'Kenya', 'Morocco',
+            'Lebanon', 'Eritrea', 'Ghana', 'Cameroon', 'Algeria']
+asia_group: ['Asia', 'Taiwan', 'Japan', 'Hong_Kong', 'Sri_Lanka',  'United_Arab_Emirates', 'Syria', 'India', 'Serbia',
+          'Afghanistan', 'China', 'Pakistan', 'Saudi_Arbia', 'Nepal', 'Malaysia', 'Philippines', 'Cambodia', 'Vietnam',
+             'Iraq', 'Bangladesh']
+europe_group: ['Europe', 'Italy', 'Turkey',' Bosnia_Herzegovina', 'Ukraine', 'Romania', 'Netherlands', 'Germany',
+              'Czech_Republic', 'France', 'Greece','Portugal', 'Hungary', 'Poland', 'Croatia', 'Ireland']
+latin_america_group: ['South_America', 'Caribbean_And_Bermuda', 'Colombia', 'Chile', 'Brazil', 'Mexico', 'Venezuela',
+                      'Haiti', 'Cuba', 'Peru', 'El_Salvador']
+
+
+# the prefix year is to ensure that the columns have the right year in the columns
+prefix_year: "2021"
+
+feature_list: ['africa_immigration', 'asia_immigration', 'europe_immigration', 'latin_america_immigration',
+               "minorities", "population_age", 'household_income', 'other_demographics', 'education',
+                'competitor_segment_density', 'competitor_banner_density','other_competitors']

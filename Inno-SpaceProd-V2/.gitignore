@@ -1,0 +1,139 @@
+/pipeline/.env
+/pipeline/logs/pipeline.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+/.idea/*
+
+# LaTeX files
+############
+*.bbl
+*.blg
+*.aux
+*.synctex.gz
+*.synctex
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Git Merge files
+############
+*.orig
+
+# Excel and CSV Files , xml files and other pycharm files#
+############
+*.csv
+*.xlsx
+*.xls
+*.fls
+*.parquet
+
+!pickles/
+!notebooks/
+*.xml
+*.iml
+*.pyc
+*.pngk
+*.ipynb
+*.pkl
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.pdf
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environments
+/venv
+environment_dev.yml
+
+# LP model files
+*.lp
+*.ilp
+*.mps
+*.sol
+/local/
+
+# Data
+/data/*
+
+# Spotfire dashboard file
+*.dxp
+
+*.egg-info
+/pipeline/adhoc/
+
+# build paths
+build/
+dist/
+
+# to store temp outputs of the modules / models
+temp/
+sobeys_space_prod/
+*.hdf5
+
+# personal  startup script used for dev purposes
+startup.py
+
+# mypy and linters
+.mypy_cache
+
+.env
+
+# coverage file created by coverage runs or pytest runs with coverage enabled
+.coverage
+.coverage.*
+
+# temporary folders created when running prod2vec locally
+temp_parquet_*
+
+# any png file writtent to root
+/*.png

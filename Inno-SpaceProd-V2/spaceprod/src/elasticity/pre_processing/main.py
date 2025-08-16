@@ -1,0 +1,303 @@
+from inno_utils.loggers import log
+from spaceprod.src.elasticity.pre_processing.helpers import (
+    combine_txn_margin_with_micro_shelve,
+    get_margin_data,
+    get_calendar_data,
+    merge_margin_trans_data,
+    process_location_data,
+    process_product_data,
+    process_trans_data,
+    report_result,
+    validate_and_pre_process_external_merged_clusters,
+    filter_bay_data_to_exclude_null_facings,
+)
+from spaceprod.utils.decorators import timeit
+from spaceprod.utils.space_context import context
+from spaceprod.utils.space_context.spark import spark
+from spaceprod.utils.validation import dup_check
+
+
+@timeit
+def task_elasticity_model_pre_processing_part_1():
+    """Does some spark pre-processing for the elasticity model"""
+
+    # determine which config(s) we need for this task
+    config_elast = context.config["elasticity"]["micro_elasticity_config"]
+    config_scope = context.config["scope"]
+    config_general = context.config["spaceprod_config"]
+
+    #######################################################################
+    # DETERMINE REQUIRED SUB-CONFIGS
+    #######################################################################
+    conf_elpr = config_elast["elasticity_pre_processing"]
+
+    #######################################################################
+    # DETERMINE CONFIG PARAMS
+    #######################################################################
+    txn_start_date = config_scope["st_date"]
+    txn_end_date = config_scope["end_date"]
+    regions = config_scope["regions"]
+    exclusion_list = config_general["transactions_global"]["exclusion_list"]
+    repl_store_no = conf_elpr["replace_store_no"]
+    excl_store_physical_location_no = conf_elpr["exclusions_store_physical_location_no"]
+    fix_for_sobeys_sutton = conf_elpr["fix_for_sobeys_sutton"]
+
+    #######################################################################
+    # READ INPUT DATA
+    #######################################################################
+
+    # regular ETL output
+    df_location = context.data.read("location")
+    df_product = context.data.read("product")
+    trx_raw = context.data.read("txnitem", regions=regions)
+    df_margin = context.data.read("margin", regions=regions)
+    df_calendar = context.data.read("calendar")
+
+    #######################################################################
+    # PROCESS DATA
+    #######################################################################
+
+    log.info("pre-processing location data")
+    df_location_processed = process_location_data(
+        spark=spark,
+        df_location=df_location,
+        fix_for_sobeys_sutton=fix_for_sobeys_sutton,
+    )
+
+    log.info("pre-processing product data")
+    df_product_processed = process_product_data(
+        df_product=df_product,
+    )
+
+    log.info("pre-processing calendar data")
+    df_calendar_processed = get_calendar_data(df_calendar=df_calendar)
+
+    log.info("pre-processing transaction data")
+    df_txnitem_processed = process_trans_data(
+        df_location=df_location_processed,
+        df_product=df_product_processed,
+        df_txnitem=trx_raw,
+        df_calendar=df_calendar_processed,
+        txn_start_date=txn_start_date,
+        txn_end_date=txn_end_date,
+        exclusion_list=exclusion_list,
+        repl_store_no=repl_store_no,
+        excl_store_physical_location_no=excl_store_physical_location_no,
+    )
+
+    log.info("processing margin data")
+    margins_raw = get_margin_data(
+        df_margin=df_margin,
+        df_calendar=df_calendar_processed,
+        txn_start_date=txn_start_date,
+        txn_end_date=txn_end_date,
+    )
+
+    log.info("merging margin and transaction data")
+    df_txns_items = merge_margin_trans_data(
+        trx_raw=df_txnitem_processed,
+        margins_raw=margins_raw,
+    )
+
+    context.data.write("elast_raw_df_txns_items", df_txns_items)
+    context.data.write("elast_raw_df_location_processed", df_location_processed)
+
+
+@timeit
+def task_elasticity_model_pre_processing_part_2():
+
+    # determine which config(s) we need for this task
+    config_elast = context.config["elasticity"]["micro_elasticity_config"]
+
+    #######################################################################
+    # DETERMINE REQUIRED SUB-CONFIGS
+    #######################################################################
+    conf_elpr = config_elast["elasticity_pre_processing"]
+
+    #######################################################################
+    # DETERMINE CONFIG PARAMS
+    #######################################################################
+    cannib_list = conf_elpr["cannib_list"]
+    allow_net_new_stores = conf_elpr["allow_net_new_stores"]
+    use_revised_merged_clusters = conf_elpr["use_revised_merged_clusters"]
+
+    #######################################################################
+    # READ INPUT DATA
+    #######################################################################
+
+    # internal datasets (generated by Space engine)
+
+    # need states output
+    df_need_states = context.data.read("final_need_states")
+
+    # Apollo + Spaceman
+    df_combined_pog_processed = context.data.read("combined_valid_pog_processed")
+
+    # read in internally-generated merged clusters
+    df_merged_clusters = context.data.read("merged_clusters")
+
+    # user-supplied merged clusters data
+    # NOTE: if you updated the path in YML file manually and than did
+    # context.reload_context_from_run_folder(...) it does not read from YML
+    # but from your run folder, need to do context.reload_config_from_disc()
+    # TODO: 'merged_clusters_external' rename ID to 'merged_clusters_revised'
+    df_merged_clusters_ext = context.data.read("merged_clusters_external")
+
+    df_txns_items = context.data.read("elast_raw_df_txns_items")
+    df_location_processed = context.data.read("elast_raw_df_location_processed")
+
+    #######################################################################
+    # PROCESS DATA
+    #######################################################################
+
+    log.info("validating + pre-processing external Merged Cluster data")
+    df_merged_clusters_ext_proc = validate_and_pre_process_external_merged_clusters(
+        df_merged_clusters=df_merged_clusters,
+        df_merged_clusters_ext=df_merged_clusters_ext,
+        allow_net_new_stores=allow_net_new_stores,
+    )
+
+    log.info("combining txnitem dat with apollo data")
+    df_data_for_fitting = combine_txn_margin_with_micro_shelve(
+        df_need_states=df_need_states,
+        df_apollo_processed=df_combined_pog_processed,
+        df_location_processed=df_location_processed,
+        df_txns_items=df_txns_items,
+        df_merged_clusters_ext_proc=df_merged_clusters_ext_proc,
+        df_merged_clusters=df_merged_clusters,
+        cannib_list=cannib_list,
+        use_revised_merged_clusters=use_revised_merged_clusters,
+    )
+
+    df_bay_data_filtered = filter_bay_data_to_exclude_null_facings(
+        df_data_for_fitting=df_data_for_fitting
+    )
+
+    #######################################################################
+    # SAVE RESULTS
+    #######################################################################
+
+    context.data.write(dataset_id="bay_data_pre_index", df=df_bay_data_filtered)
+
+    #######################################################################
+    # VALIDATION OF OUTPUT + SUMMARY LOGGING
+    #######################################################################
+
+    # final dup check
+    # TODO: confirm the dimensionality here
+    dims = ["EXEC_ID", "STORE_PHYSICAL_LOCATION_NO", "ITEM_NO", "FACINGS"]
+    dup_check(context.data.read("bay_data_pre_index"), dims)
+
+    dims = [
+        "REGION",
+        "NATIONAL_BANNER_DESC",
+        "SECTION_MASTER",
+        "STORE_PHYSICAL_LOCATION_NO",
+        "ITEM_NO",
+        "FACINGS",
+    ]
+
+    dup_check(context.data.read("bay_data_pre_index"), dims)
+
+    # spit a summary in the logs
+    report_result(context.data.read("bay_data_pre_index"))
+
+
+@timeit
+def task_elasticity_model_pre_processing_part_2_all():
+
+    # determine which config(s) we need for this task
+    config_elast = context.config["elasticity"]["micro_elasticity_config"]
+
+    #######################################################################
+    # DETERMINE REQUIRED SUB-CONFIGS
+    #######################################################################
+    conf_elpr = config_elast["elasticity_pre_processing"]
+
+    #######################################################################
+    # DETERMINE CONFIG PARAMS
+    #######################################################################
+    cannib_list = conf_elpr["cannib_list"]
+    allow_net_new_stores = conf_elpr["allow_net_new_stores"]
+    use_revised_merged_clusters = conf_elpr["use_revised_merged_clusters"]
+
+    #######################################################################
+    # READ INPUT DATA
+    #######################################################################
+
+    # internal datasets (generated by Space engine)
+
+    # need states output
+    df_need_states = context.data.read("final_need_states")
+
+    # Apollo + Spaceman
+    df_combined_pog_processed = context.data.read("combined_pog_processed")
+
+    # read in internally-generated merged clusters
+    df_merged_clusters = context.data.read("merged_clusters")
+
+    # user-supplied merged clusters data
+    # NOTE: if you updated the path in YML file manually and than did
+    # context.reload_context_from_run_folder(...) it does not read from YML
+    # but from your run folder, need to do context.reload_config_from_disc()
+    # TODO: 'merged_clusters_external' rename ID to 'merged_clusters_revised'
+    df_merged_clusters_ext = context.data.read("merged_clusters_external")
+
+    df_txns_items = context.data.read("elast_raw_df_txns_items")
+    df_location_processed = context.data.read("elast_raw_df_location_processed")
+
+    #######################################################################
+    # PROCESS DATA
+    #######################################################################
+
+    log.info("validating + pre-processing external Merged Cluster data")
+    df_merged_clusters_ext_proc = validate_and_pre_process_external_merged_clusters(
+        df_merged_clusters=df_merged_clusters,
+        df_merged_clusters_ext=df_merged_clusters_ext,
+        allow_net_new_stores=allow_net_new_stores,
+    )
+
+    log.info("combining txnitem dat with apollo data")
+    df_data_for_fitting = combine_txn_margin_with_micro_shelve(
+        df_need_states=df_need_states,
+        df_apollo_processed=df_combined_pog_processed,
+        df_location_processed=df_location_processed,
+        df_txns_items=df_txns_items,
+        df_merged_clusters_ext_proc=df_merged_clusters_ext_proc,
+        df_merged_clusters=df_merged_clusters,
+        cannib_list=cannib_list,
+        use_revised_merged_clusters=use_revised_merged_clusters,
+    )
+
+    df_bay_data_filtered = filter_bay_data_to_exclude_null_facings(
+        df_data_for_fitting=df_data_for_fitting
+    )
+
+    #######################################################################
+    # SAVE RESULTS
+    #######################################################################
+
+    context.data.write(dataset_id="bay_data_pre_index_all", df=df_bay_data_filtered)
+
+    #######################################################################
+    # VALIDATION OF OUTPUT + SUMMARY LOGGING
+    #######################################################################
+
+    # final dup check
+    # TODO: confirm the dimensionality here
+    dims = ["EXEC_ID", "STORE_PHYSICAL_LOCATION_NO", "ITEM_NO", "FACINGS"]
+    dup_check(context.data.read("bay_data_pre_index_all"), dims)
+
+    dims = [
+        "REGION",
+        "NATIONAL_BANNER_DESC",
+        "SECTION_MASTER",
+        "STORE_PHYSICAL_LOCATION_NO",
+        "ITEM_NO",
+        "FACINGS",
+    ]
+
+    dup_check(context.data.read("bay_data_pre_index_all"), dims)
+
+    # spit a summary in the logs
+    report_result(context.data.read("bay_data_pre_index_all"))

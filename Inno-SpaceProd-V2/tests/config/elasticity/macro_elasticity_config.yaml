@@ -1,0 +1,56 @@
+
+inputs:
+  inputs_location: "sobeys_space_prod/dev/elasticity_modeling/inputs/"
+  location: "prod_outputs/etl/all/location/latest/"
+  product: "prod_outputs/etl/all/product/latest/"
+  transactions: 'prod_outputs/etl/ontario/txnitem/latest'
+  margin: 'prod_outputs/etl/ontario/cogs/latest'
+#  need_state: "sobeys_space_prod/dev/internal_clustering/need_state_output_new/" #shouldn't ned this
+#  model_inputs: "/dbfs/mnt/blob/sobeys_space_prod/dev/elasticity_modeling/intermediate_outputs/bay_data_pre_index/"
+  merged_clusters: "sobeys_space_prod/dev/elasticity_modeling/inputs/merged_store_clusters/20210426 Clusters v4.csv"
+
+outputs:
+  final_outputs_location: "sobeys_space_prod/dev/elasticity_modeling/macro_outputs/"
+  intermediate_outputs_location: "sobeys_space_prod/dev/elasticity_modeling/macro_temp/"
+  testing_outputs_location: "sobeys_space_prod/dev/elasticity_modeling/macro_temp_new_need_states/"
+
+
+transactions:
+  region: ["ontario"]
+  start_date: "2020-06-01"
+  end_date: "2021-05-31"
+  banner: "SOBEYS"
+  exclusion_list: [ '4714',
+                    '4731',
+    #'7497', sutton store
+                    '701',
+                    '867',
+                    '937',
+                    '4741',
+                    '4723',
+                    '4743',
+                    '933',
+                    '934',
+                    '695',
+                    '819',
+                    '693',
+                    '17066',
+  ]
+  correction_record: ['26978', '11429', "SOBEYS", "4761", "Ontario"]
+#  start_date: "2021-02-07"
+#  end_date: "2021-04-30"
+
+#this is still a dummy artificial category for the elasticity and opt code.
+#the new need states dont rely on cannibilization ids anymore but are included to group items together
+#that should be all within the same group of need states as well as optimized in the same general section
+cannib_list: []
+
+model:
+  dependent_var: 'Sales' #either run on sales or margin
+#  dependent_var: 'Margin' #either run on sales or margin
+  seed: 123
+  fitting: true #if false, model will be read from pickle file
+  read_processed_df: true #if false, all txn, margin, product, and location data is newly read in
+  scope: 'macro'
+  prediction_increment: 30 # every 30 inches / every frozen door can be allocated # this is the increment level we can allocate, e.g. a multiplier of this number can be allocated of space to a section
+

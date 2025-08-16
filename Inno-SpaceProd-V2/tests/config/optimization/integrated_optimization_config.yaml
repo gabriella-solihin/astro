@@ -1,0 +1,96 @@
+outputs:
+  final_outputs_location: "sobeys_space_prod/dev/optimization/outputs/"
+  raw_opt_location: "sobeys_space_prod/dev/optimization/intermediate/raw/integrated/"
+  processed_opt_location: "/tmp/"
+  sets_opt_location: "/tmp/"
+  model_results_opt_location: "/tmp/"
+  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/integrated/"
+  local_bay_data_dev_output: "./bay_model_input_from_opt.csv"
+  local_elasticity_output: "./elasticities.csv"
+
+inputs:
+  bay_data_sales_margin_outputs_location: "sobeys_space_prod/dev/elasticity_modeling/temp/" # TODO all regions if still needed
+  pog_input_file: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs/FRZ_ONT_BCG_MAY26 vREVISED.csv"
+  elasticity_output_parallel: "sobeys_space_prod/dev/elasticity_modeling/outputs_for_opt/"
+  section_master_path: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs/POG_Frozen_Section_Master_062521.csv"
+  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/macro/"
+#  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/macro_realogram/"
+  merged_clusters: "sobeys_space_prod/dev/elasticity_modeling/inputs/merged_store_clusters/20210426 Clusters v5.csv"
+  macro_section_overwrite_path: "sobeys_space_prod/dev/optimization/intermediate/results_processing/macro/Macro_section_man_adj_08172021.csv"
+  prod_path: "prod_outputs/etl/all/product/latest"
+  location_path: "/prod_outputs/etl/all/location/latest/"
+  read_all_raw_data_flag: false
+
+scope:
+  region: ["ontario"] #needs to be lower case
+  banner: ["Sobeys"]
+  dept: ["Frozen Grocery"]
+
+parameters:
+  dependent_var: 'Sales' # whether we run opt with sales or 'Margin' as outcome variable to optimize for
+  use_macro_section_length: false # if this is set to true we use the macro allocated space per section in the micro opt instead of the current POG section length equivalent space
+  max_facings: 13 #number of facings which includes the 0th facing - needs to be the same as elasticity curve files have
+  overwrite_macro_section_with_manual_adj: false # if this is true, we also read in an overwrite file which manually adjusts the macro section used in the micro opt instead of the direct macro opt output
+  difference_of_facings_to_allocate_from_max_in_POG: -1 # this number is added (needs to be negative) when # of facings to allocate from max. facings seen in POG section
+  difference_of_facings_to_allocate_in_unit_proportions: 1 # this is added to previously determined max facings which already added the diff above. e.g. should be the same number just inverses
+
+  section_length_upper_deviation: 1.02 #from current space
+  section_length_lower_deviation: .98 #from current space
+  extra_space_percent_per_max_section_length: 1.2 # percentage of original section :this is the extra space percentage allowed per max section length across each store - note this is now multiplied by shelves because this is in micro format
+  extra_space_percent_per_min_section_length: .8 # percentage of original section :this is the less space percentage min section length across each store - note this is now multiplied by shelves because this is in micro format
+    #above extra space: set to 1 and 1 if you want to run on existing POG section length, i.e. keep macro space constant
+  large_number: 99999
+
+  section_master_excluded: ['Frozen Natural Combo', 'Frozen Natural Breads Gluten Free', 'Frozen Natural Entrees Pizza']
+
+  # TODO read in a file for this dataframe by region banner dept. to be more general
+  item_numbers_for_constant_treatment: [ '232154',
+                       '232565',
+                       '232569',
+                       '233098',
+                       '233105',
+                       '233106',
+                       '233107',
+                       '274250',
+                       '282187',
+                       '298164',
+                       '764726',
+                       '764891',
+                       '764895',
+                       '659334'] #last one is a delissio with no margin and only recent sales
+#                       '682017',#fruit one not in pog
+#                       '399174',
+#                      '366299',#breakfast maybe only in one cluster missing?
+#                      '588616', #missing in 3 clusters breakfast
+#                      '679985', #ice cream
+#                      '655184',
+#                      '606386',
+#                      '655185',
+#                      '505939',#dessert
+#                      '612879'] #, #veggie
+#                   #   '892065'] #handheld
+
+# solver
+solver_parameters:
+  time_limit: 60   #CBCs CPU time not wall clock time
+  gap_limit: .005  # percentage gap once reached model terminates early
+  solver: 'CBC'
+  threads: 5 # number of cores to be used on single store instance
+  keep_files: False
+  min_category_space: true #for small categories like fruit make this to false - otherwise infeasible
+  retry_seconds: 120 # rerun opt when it was infeasible in case there was a databricks cluster error
+
+
+save_intermediate_outputs: false
+write_output_parquet: true
+
+
+parallel_run:
+  max_workers: 1  # parallelization of stores and sections. set to 1 for debugging
+
+filter_dict:
+  STORE_NO:
+    EXISTING: "7497"
+    NEW: "4761"
+  store_int_replace: 17066
+  store_str_replace: '17066'

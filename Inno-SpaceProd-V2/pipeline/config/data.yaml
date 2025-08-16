@@ -1,0 +1,125 @@
+# This configuration file holds data paths that are COMMON to ALL
+# modules and pipelines within Space Prod
+# Typically those are EXTERNAL dataset, e.g. 'txnitem', 'product', 'location', etc.
+
+
+# list of EXTERNAL-to-Space datasets, i.e. those that are not generated
+# by Space Prod code repository.
+# Space Prod is only CONSUMING these datasets as a user
+external:
+
+    # main transactional fact table split by region
+    # KEY=TRANSACTION_RK,ITEM_SK,CALENDAR_DT
+    txnitem:
+        quebec: "sobeys_space_prod/external_from_prod/prod_outputs/etl/quebec/txnitem/latest"
+        atlantic: "sobeys_space_prod/external_from_prod/prod_outputs/etl/atlantic/txnitem/latest"
+        ontario: "sobeys_space_prod/external_from_prod/prod_outputs/etl/ontario/txnitem/latest"
+        west: "sobeys_space_prod/external_from_prod/prod_outputs/etl/west/txnitem/latest"
+
+    margin:
+        quebec: 'sobeys_space_prod/external_from_prod/prod_outputs/etl/quebec/cogs/latest'
+        atlantic: 'sobeys_space_prod/external_from_prod/prod_outputs/etl/atlantic/cogs/latest'
+        ontario: 'sobeys_space_prod/external_from_prod/prod_outputs/etl/ontario/cogs/latest'
+        west: 'sobeys_space_prod/external_from_prod/prod_outputs/etl/west/cogs/latest'
+
+
+    # product dimensional data
+    # KEY=ITEM_SK
+    product: "sobeys_space_prod/external_from_prod/prod_outputs/etl/all/product/latest"
+
+    # location (store) dimensional data
+    # KEY=RETAIL_OUTLET_LOCATION_SK
+    location: "sobeys_space_prod/external_from_prod/prod_outputs/etl/all/location/latest"
+
+    # calendar information that caries info on ad weeks
+    calendar: "sobeys_space_prod/external_from_prod/prod_outputs/etl/all/calendar/latest"
+
+    # Dataset containing ITEM <-> SECTION NAME mapping that is used as
+    # dimension to run modelling on
+    # TODO: will move to 'prod_outputs' once ETL is established as part of Inno-ETL
+    apollo: "adhoc/space_prod/apollo_data_v1_20211027"
+
+    # equivalent of Apollo data but for Quebec
+    #spaceman_old: "dbfs:/mnt/blob/adhoc/space_prod/spaceman_data_v1_20211105"
+
+    spaceman: "adhoc/space_prod/spaceman_feb_7_2022/"
+
+    # Dataset containing contractility flags per customer, each flag tells us
+    # whether we are allowed to contact a customer and through what channel
+    # NOTE: must be deduped by taking latest 'DROP_MODIFIED_DATE' for each 'CUSTOMER_CARD_SK'
+    contactability_flag: "sobeys_perso_etl_data/cust_flag_data"
+
+    # Competitors list within 5, 10 and 15 mins drive time from sobeys store and includes demographic data
+    demographics_5mins_drive: "sobeys_space_prod/dev/external_clustering/inputs/5min_Drivetime.csv"
+    demographics_10mins_drive: "sobeys_space_prod/dev/external_clustering/inputs/10min_EADump.csv"
+    demographics_15mins_drive: "sobeys_space_prod/dev/external_clustering/inputs/15min_EADump.csv"
+
+    # Grocery Retailers - Store List for Canada
+    store_list: "sobeys_space_prod/dev/external_clustering/inputs/Grocery Retailers - Store List - Sales and Sizes_October2021.csv"
+
+
+    # Competitors list within 5, 10 and 15 mins drive time
+    competitors: "sobeys_space_prod/dev/external_clustering/inputs/2021-10-20 - Competition by Drive Time latest.csv"
+
+    # a small dataset that defines mapping between variable names for internal clustering
+    mapping: "sobeys_space_prod/dev/external_clustering/inputs/mapping.csv"
+
+    # these 2 files are used in the store-clustering dashboard as lookups for cleaned versions of variable names.
+    feature_dashboard_names: "adhoc/dominic/clustering_dashboard/2021_external_demo_feature_dashboard_names.csv"
+    competitor_dashboard_names: "adhoc/dominic/clustering_dashboard/2021_external_comp_feature_dashboard_names.csv"
+    
+    # mapping file that maps the ‘automatically cleaned section masters’ to the finalized hand-cleaned section masters
+    # this file serves 2 purposes: it cleans the section masters, and also consolidates many of them.
+    # it is created manually
+    # note that the regex cleaning that creates the automatically cleaned section masters in clean_section_master should not be changed, because it will render the mappings in the file obsolete!
+    section_master_override: "adhoc/space_prod/section_master_override/section_master_override_2022_02_23.csv"
+    # mapping file that maps the automatically cleaned French section masters to English section masters
+    # this file serves 2 purposes: it cleans the section masters, and also consolidates many of them.
+    # it is created manually
+    french_to_english_translations: "adhoc/space_prod/french_to_eng_pog_sections/french_to_english_section_master_translations.csv"
+
+    # merged cluster dataset that was processed and patched by an analyst after
+    # we provided them with our merged cluster output
+    merged_clusters_external: "sobeys_space_prod/dev/merged_clusters_post_review/merged_clusters_file_EC_QC_2022_04_07_3x3_consolidated_hybrid.csv"
+#    merged_clusters_external: "sobeys_space_prod/dev/merged_clusters_post_review/merged_clusters_file_EC_QC_2022_01_20_3x3_consolidated_ONE_CLUSTER.csv"
+
+    # business-supplied margin-driven region/banner/cluster combinations
+    # used in optimization during rerun=True mode (for margin rerun)
+    region_banner_clusters_for_margin_reruns: "sobeys_space_prod/dev/merged_clusters_post_review/Margin_rerun_merged_clusters_QC_04_13_3x3_hybrid.csv"
+#    region_banner_clusters_for_margin_reruns: "sobeys_space_prod/dev/adhoc/Margin_rerun_merged_clusters_03_18_1_cluster.csv"
+
+    # the hardcoded part to amend the above dataset
+    # region_banner_sections_for_margin_reruns: "sobeys_space_prod/dev/adhoc/Margin_rerun_sections_frozen_only_2021_11_30.csv"
+    # manually constructed by us based on business input
+    # e.g. when changed: when spelling of a SM changes OR when we change the set of SMs
+    region_banner_sections_for_margin_reruns: "sobeys_space_prod/dev/adhoc/Margin_rerun_all_sections_2022_02_23_centre_123.csv"
+
+
+    # input used in optimization and elasticity
+    # maps each section master to a department. We trade off macro space (section space) in the optimization within each department.
+    # manually constructed by us based on business input
+    # e.g. when changed: when spelling of a SM changes OR when we change the set of SM<->dept mapping
+#    pog_department_mapping_file: "sobeys_space_prod/dev/adhoc/POG_section_master_lvl3_mapping_2022_02_23.csv"
+    pog_department_mapping_file: "sobeys_space_prod/dev/adhoc/POG_section_master_lvl3_mapping_2022_02_23_centre_123.csv"
+
+
+    # supplier, own brands, and localized space input files
+    # TODO: @Dominic, where are these coming from / how to update them?
+    supplier_item_mapping_path: "adhoc/jason/space_prod/supplier_coffee_fb_naveen/"  #temporary v1 data for constraint
+    own_brands_path: "adhoc/jason/space_prod/ownbrands/" #temporary v1 data for constraint
+
+    localized_space_request: "sobeys_space_prod/dev/adhoc/Supplier_own_brands_local_input_files/Algorithm Constraints File - Frozen Breakfast vTestData - Localization.csv" # localized reserved item space request for all region banners per section master from merchants
+
+    # updated more regularly
+    localized_default_space: "adhoc/yi/local_items/"
+#    supp_own_brands_request: "sobeys_space_prod/dev/adhoc/Supplier_own_brands_local_input_files/Algorithm Constraints File - Feb_5_2022 Scenario 1.csv" # supplier to own brands request file for all region banners per section master from merchants
+    supp_own_brands_request: "sobeys_space_prod/dev/adhoc/Supplier_own_brands_local_input_files/2022 03 17 pull Coffee Sc1 and Frozen Breakfast Sc2.csv"
+    # sales adjustment numbers from Alan - needs to move into pipeline
+    # TODO bring into pipeline
+    sales_penetration_proportions: "sobeys_space_prod/dev/adhoc/sales_penetration/test_negotiations_num_facings_to_assign_0331_non_negative_v2.csv"
+    margin_penetration_proportions: "sobeys_space_prod/dev/adhoc/sales_penetration/test_negotiations_num_facings_to_assign_0331_non_negative_margin_v2.csv"
+
+    # items held constant by region banner
+    items_held_constant: "sobeys_space_prod/dev/adhoc/items_to_hold_constant/2022 03 28 SKU Level Constraints to hold new.csv"
+
+run_folder: "dbfs:/mnt/blob/sobeys_space_prod/{run_id}"

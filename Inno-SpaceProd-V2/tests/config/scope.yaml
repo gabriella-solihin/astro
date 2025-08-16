@@ -1,0 +1,32 @@
+# this config defines the overall scope for the pipeline
+
+###########################################
+# UNIVERSAL SCOPING FOR ALL MODULES
+###########################################
+
+# list of regions to be in scope for this run
+# Must have at least 1 region populated (must be a list of strings)
+# txnitem table is filtered by region
+regions: ["quebec", "ontario", "atlantic","west"]
+
+#  list of banner names that are in scope for the pipeline.
+# Leave empty to include ALL banners (must be a list of strings)
+# location table (join on RETAIL_OUTLET_LOCATION_SK, STORE_NO)
+banners: ["SOBEYS", "FOODLAND", "IGA", "SAFEWAY", "FRESH CO", "THRIFTY FOODS"] #, ,done to the left "SAFEWAY", "SOBEYS", "FRESH CO"]
+
+# list of POG sections (SECTION_MASTER) to be in scope for this run
+# Leave empty to include ALL POG sections (must be a list of strings)
+# apollo data (join STOCKCODE / ITEM_NO)
+pog_section_masters: []
+
+
+adjacencies_departments: ["Frozen"]
+
+# which departments to use (used in Optimization only)
+# initcap convention
+depts: ["Impulse"] #["Frozen"] #["Centre Store"] #["Frozen", "Impulse", "Centre Store"] #["Non Food"] #["Dairy"]  #["Impulse"] #["Centre Store"]
+
+
+# start/end dates for transactions
+st_date: "2020-10-31"
+end_date: "2021-10-31"

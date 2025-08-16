@@ -1,0 +1,44 @@
+outputs:
+  ##############################################################
+  # Quality Assurance OUTPUTS
+  ##############################################################
+  # QA Excel
+  path_qa_excel: "sobeys_space_prod/{run_id}/optimization/sense_checks/final_qa_report.xlsx"
+
+  # QA summary
+  QA_check_summary: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary.csv"
+
+  # QA views - Assert Checks
+  QA_check_sales_section_uplift: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T01_sales_section_uplift.csv"
+  QA_check_margins_section_uplift: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T02_margins_section_uplift.csv"
+  QA_check_needstate_assignment: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T03_needstate_assignment.csv"
+  QA_check_cluster_assignment: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T04_cluster_assignment.csv"
+  QA_check_needstate_facing: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T05_needstate_facing.csv"
+  QA_check_maximum_break_changes: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T06_maximum_break_changes.csv"
+  QA_check_breaks_int: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T07_non_int_legal_breaks.csv"
+  QA_check_optimized_space_fits_summary: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T08_optimized_space_fits_summary.csv"
+  QA_check_optimized_space_fits_details: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T09_optimized_space_fits_details.csv"
+  QA_check_item_max_opt_facings: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T10_items_over_max_opt_facing.csv"
+
+  # QA views - Summary Review
+  QA_check_top_items_per_NS_Cur_Sale: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T11_top_items_per_NS_Cur_Sale.csv"
+  QA_check_top_items_per_NS_Opt_Sale: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T12_top_items_per_NS_Opt_Sale.csv"
+  QA_check_top_bot_space_change_NS_per_cluster: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T13_top_bot_space_change_NS_per_cluster.csv"
+  QA_check_top_bot_space_change_NS_per_cluster_summary: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T14_top_bot_space_change_NS_per_cluster_summary.csv"
+  QA_check_assign_facing_by_unitprop: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T15_assign_facing_by_unitprop_df.csv"
+
+  QA_check_sales_top_NS_by_pen_index: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T16_top_NS_by_sales_pen_index.csv"
+  QA_check_margin_top_NS_by_pen_index: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T17_top_NS_by_margin_pen_index.csv"
+
+  QA_check_NS_outliers_by_sales: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T18_NS_outliers_by_sales.csv"
+  QA_check_NS_outliers_master_by_sales: "sobeys_space_prod/{run_id}/optimization/sense_checks/summary_views/T18_NS_outliers_master_by_sales.csv"
+
+parameters:
+  ##############################################################
+  # Quality Assurance Parameters
+  ##############################################################
+  outliers_ci_detection_z_score: 2.24 # The Z Score that will used for confidence intervals to detect the outliers (both the plot module and cal_penetration module)
+  delisted_items_unique_customers_tol: 100 # Items which have > this number (unique customers purchased) before will be reported
+  delisted_items_cross_shop_perc_tol: 0.2 # Items which have < this number (cross shop percentage) will be reported
+  pog_sold_items_perc_tol: 0.8 # Stores which have > this number (the percentage of items that mismatch POG and trx) will be reported
+

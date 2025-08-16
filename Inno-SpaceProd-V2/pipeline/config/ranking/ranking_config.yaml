@@ -1,0 +1,11 @@
+outputs:
+  ##############################################################
+  # BY RANKING OUTPUTS
+  ##############################################################
+  store_cluster_id_item_counts: "sobeys_space_prod/{run_id}/ranking/store_cluster_id_item_counts"
+  ranking_removal: "sobeys_space_prod/{run_id}/ranking/removal_ranking"
+  ranking_addition: "sobeys_space_prod/{run_id}/ranking/addition_ranking"
+  ranking_macro_item_removal: "sobeys_space_prod/{run_id}/ranking/removal_macro_item_ranking"
+  ranking_macro_section_removal: "sobeys_space_prod/{run_id}/ranking/removal_macro_section_ranking"
+  ranking_macro_item_addition: "sobeys_space_prod/{run_id}/ranking/addition_macro_item_ranking"
+  ranking_macro_section_addition: "sobeys_space_prod/{run_id}/ranking/addition_macro_section_ranking"

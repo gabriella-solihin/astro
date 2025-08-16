@@ -1,0 +1,77 @@
+outputs:
+  final_outputs_location: "sobeys_space_prod/dev/optimization/outputs/micro/"
+  raw_opt_location: "sobeys_space_prod/dev/optimization/intermediate/raw/micro/"
+
+  processed_opt_location: "/tmp/" #temp on local is faster than any other upload and the files can be discarded afterwards
+  sets_opt_location: "/tmp/"
+  model_results_opt_location: "/tmp/"
+  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/micro/"
+
+
+inputs:
+  pog_input_file: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs/FRZ_ONT_BCG_MAY26 vREVISED.csv"
+  elasticity_output: "sobeys_space_prod/dev/elasticity_modeling/outputs/"
+  need_state_output: "sobeys_space_prod/dev/internal_clustering/need_state_output_new/"
+  elasticity_input: "sobeys_space_prod/dev/elasticity_modeling/inputs/"
+  elasticity_output_temp: "sobeys_space_prod/dev/elasticity_modeling/temp_new_need_states/"
+  section_master_path: "sobeys_space_prod/dev/elasticity_modeling/inputs/POGs/POG_Frozen_Section_Master_062521.csv"
+  results_proc_opt_location: "sobeys_space_prod/dev/optimization/intermediate/results_processing/macro/"
+  prod_path: "prod_outputs/etl/all/product/latest"
+  read_all_raw_data_flag: false
+
+transactions:
+  region: "ontario"
+  start_date: "2020-04-01" # FOR opt these shouldn't matter
+  end_date: "2020-04-07" # FOR opt these shouldn't matter
+
+parameters:
+  scope: 'micro'
+  dependent_var: 'Sales' # whether we run opt with sales or 'Margin' as outcome variable to optimize for
+  use_macro_section_length: false # if this is set to true we use the macro allocated space per section in the micro opt instead of the current POG section length equivalent space
+  max_facings_per_item: 3 #upper bound of facings per item we can allocate
+  shelves_per_section_length: 4  #multiply section length - assumption only valid for pizza currenlty!
+  section_length_upper_deviation: 1.02 #from current space - the maximum allowable deviation of section length we allow the opt to allocate
+  section_length_lower_deviation: .98 #from current space - the minimum allowable deviation of section length we allow the opt to allocate
+  handheld_section_exclusions: [ 'FROZEN HANDHELDS 01DR SBY ONT', 'FROZEN HANDHELDS 02DR SBY ONT',
+                                 'FROZEN HANDHELDS 03DR SBY ONT', 'FROZEN HANDHELDS 04DR SBY ONT',
+                                 'FROZEN HANDHELDS 05DR SBY ONT',]  #these sections are excluded as well as their items
+  item_nos_for_constant_treatment: ['232154',
+                       '232565',
+                       '232569',
+                       '233098',
+                       '233105',
+                       '233106',
+                       '233107',
+                       '274250',
+                       '282187',
+                       '298164',
+                       '644453',
+                       '644456',
+                       '764726',
+                       '764891',
+                       '764895',
+                       '659334'] #last one is a delissio with no margin and only recent sales
+
+
+# solver
+solver_parameters:
+  time_limit: 450   #CBCs CPU time not wall clock time
+  gap_limit: .0005  # do not increase without a nationwide calibration. This has huge budgetary implications
+  solver: 'CBC'
+  keep_files: False
+  retry_seconds: 120 # rerun opt when it was infeasible in case there was a databricks cluster error
+
+
+
+save_intermediate_outputs: false
+write_output_parquet: true
+
+
+parallel_run:
+  max_workers: 1
+
+filter_dict:
+  cannib_id: "CANNIB-883"
+  STORE_NO:
+    EXISTING: "7497"
+    NEW: "4761"
