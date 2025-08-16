@@ -1,0 +1,10 @@
+{
+    "name": "astro-project",
+    "dockerFile": "Dockerfile",
+    "workspaceFolder": "/workspace",
+    "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+    ],
+    "forwardPorts": [8888]
+}
