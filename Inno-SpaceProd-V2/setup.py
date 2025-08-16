@@ -46,7 +46,7 @@ except Exception:
 
 current_time = datetime.now().strftime("%Y%m%d.%H%M%S")
 
-version = current_time + (code_version or "")
+version = current_time # + (code_version or "")
 
 setup(
     name=NAME,
